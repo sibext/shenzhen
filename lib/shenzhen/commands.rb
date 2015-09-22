@@ -11,6 +11,7 @@ require 'plugins/crashlytics'
 require 'plugins/fir'
 require 'plugins/pgyer'
 require 'plugins/baza'
+require 'plugins/test'
 
 require 'commands/build'
 require 'commands/distribute'

@@ -3,9 +3,9 @@ require 'faraday'
 require 'faraday_middleware'
 
 module Shenzhen::Plugins
-  module Baza
+  module Test
     class Client
-      HOSTNAME = 'baza.yozhik.sibext.ru'
+      HOSTNAME = 'localhost:3000'
 
       def initialize(app_id, api_key)
         @app_id, @api_key = app_id, api_key
@@ -64,7 +64,7 @@ command :'distribute:baza' do |c|
     @visibility = options.visibility
     @message = options.message
 
-    client = Shenzhen::Plugins::Baza::Client.new(@app_id, @api_key)
+    client = Shenzhen::Plugins::Test::Client.new(@app_id, @api_key)
     response = client.upload_build(@file)
     if (200...300) === response.status and not response.body["error"]
       say_ok "Build successfully uploaded to Baza"

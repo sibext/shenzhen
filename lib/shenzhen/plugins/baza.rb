@@ -9,7 +9,7 @@ module Shenzhen::Plugins
 
       def initialize(app_id, api_key)
         @app_id, @api_key = app_id, api_key
-        @connection = Faraday.new(:url => "http://#{HOSTNAME}") do |builder|
+        @connection = Faraday.new(:url => "http://#{HOSTNAME}", :request => { :timeout => 480 }) do |builder|
           builder.request :multipart
           builder.request :json
           builder.response :json, :content_type => /\bjson$/

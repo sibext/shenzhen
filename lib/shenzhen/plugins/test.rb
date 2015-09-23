@@ -34,8 +34,8 @@ module Shenzhen::Plugins
   end
 end
 
-command :'distribute:baza' do |c|
-  c.syntax = "ipa distribute:baza [options]"
+command :'distribute:test' do |c|
+  c.syntax = "ipa distribute:test [options]"
   c.summary = "Distribute an .ipa file over baza"
   c.description = ""
   c.option '-f', '--file FILE', ".ipa file for the build"

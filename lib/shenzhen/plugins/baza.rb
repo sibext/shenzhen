@@ -5,7 +5,7 @@ require 'faraday_middleware'
 module Shenzhen::Plugins
   module Baza
     class Client
-      HOSTNAME = 'baza.yozhik.sibext.ru'
+      HOSTNAME = 'baza.sibext.com'
 
       def initialize(app_id, api_key)
         @app_id, @api_key = app_id, api_key

@@ -3,7 +3,7 @@ require 'faraday'
 require 'faraday_middleware'
 
 module Shenzhen::Plugins
-  module bazafordev
+  module Baza_for_dev
     class Client
       HOSTNAME = 'localhost:3000'
 
@@ -34,8 +34,8 @@ module Shenzhen::Plugins
   end
 end
 
-command :'distribute:bazafordev' do |c|
-  c.syntax = "ipa distribute:bazafordev [options]"
+command :'distribute:baza_for_dev' do |c|
+  c.syntax = "ipa distribute:baza_for_dev [options]"
   c.summary = "Distribute an .ipa file over baza"
   c.description = ""
   c.option '-f', '--file FILE', ".ipa file for the build"
@@ -64,7 +64,7 @@ command :'distribute:bazafordev' do |c|
     @visibility = options.visibility
     @message = options.message
 
-    client = Shenzhen::Plugins::bazafordev::Client.new(@app_id, @api_key)
+    client = Shenzhen::Plugins::Baza_for_dev::Client.new(@app_id, @api_key)
     response = client.upload_build(@file)
     if (200...300) === response.status and not response.body["error"]
       say_ok "Build successfully uploaded to Baza"

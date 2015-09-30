@@ -3,9 +3,9 @@ require 'faraday'
 require 'faraday_middleware'
 
 module Shenzhen::Plugins
-  module baza_at_sibext
+  module bazafordev
     class Client
-      HOSTNAME = 'baza.sibext.com'
+      HOSTNAME = 'localhost:3000'
 
       def initialize(app_id, api_key)
         @app_id, @api_key = app_id, api_key
@@ -34,8 +34,8 @@ module Shenzhen::Plugins
   end
 end
 
-command :'distribute:baza_at_sibext' do |c|
-  c.syntax = "ipa distribute:baza_at_sibext [options]"
+command :'distribute:bazafordev' do |c|
+  c.syntax = "ipa distribute:bazafordev [options]"
   c.summary = "Distribute an .ipa file over baza"
   c.description = ""
   c.option '-f', '--file FILE', ".ipa file for the build"
@@ -64,7 +64,7 @@ command :'distribute:baza_at_sibext' do |c|
     @visibility = options.visibility
     @message = options.message
 
-    client = Shenzhen::Plugins::baza_at_sibext::Client.new(@app_id, @api_key)
+    client = Shenzhen::Plugins::bazafordev::Client.new(@app_id, @api_key)
     response = client.upload_build(@file)
     if (200...300) === response.status and not response.body["error"]
       say_ok "Build successfully uploaded to Baza"

@@ -3,7 +3,7 @@ require 'faraday'
 require 'faraday_middleware'
 
 module Shenzhen::Plugins
-  module bazaforstage
+  module Baza_for_stage
     class Client
       HOSTNAME = 'baza.yozhik.sibext.ru'
 
@@ -34,8 +34,8 @@ module Shenzhen::Plugins
   end
 end
 
-command :'distribute:bazaforstage' do |c|
-  c.syntax = "ipa distribute:bazaforstage [options]"
+command :'distribute:baza_for_stage' do |c|
+  c.syntax = "ipa distribute:baza_for_stage [options]"
   c.summary = "Distribute an .ipa file over baza"
   c.description = ""
   c.option '-f', '--file FILE', ".ipa file for the build"
@@ -64,7 +64,7 @@ command :'distribute:bazaforstage' do |c|
     @visibility = options.visibility
     @message = options.message
 
-    client = Shenzhen::Plugins::bazaforstage::Client.new(@app_id, @api_key)
+    client = Shenzhen::Plugins::Baza_for_stage::Client.new(@app_id, @api_key)
     response = client.upload_build(@file)
     if (200...300) === response.status and not response.body["error"]
       say_ok "Build successfully uploaded to Baza"

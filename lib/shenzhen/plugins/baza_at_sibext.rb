@@ -3,13 +3,13 @@ require 'faraday'
 require 'faraday_middleware'
 
 module Shenzhen::Plugins
-  module Test
+  module baza_at_sibext
     class Client
-      HOSTNAME = 'localhost:3000'
+      HOSTNAME = 'baza.sibext.com'
 
       def initialize(app_id, api_key)
         @app_id, @api_key = app_id, api_key
-        @connection = Faraday.new(:url => "http://#{HOSTNAME}") do |builder|
+        @connection = Faraday.new(:url => "http://#{HOSTNAME}", :request => { :timeout => 480 }) do |builder|
           builder.request :multipart
           builder.request :json
           builder.response :json, :content_type => /\bjson$/
@@ -34,8 +34,8 @@ module Shenzhen::Plugins
   end
 end
 
-command :'distribute:test' do |c|
-  c.syntax = "ipa distribute:test [options]"
+command :'distribute:baza_at_sibext' do |c|
+  c.syntax = "ipa distribute:baza_at_sibext [options]"
   c.summary = "Distribute an .ipa file over baza"
   c.description = ""
   c.option '-f', '--file FILE', ".ipa file for the build"
@@ -64,7 +64,7 @@ command :'distribute:test' do |c|
     @visibility = options.visibility
     @message = options.message
 
-    client = Shenzhen::Plugins::Test::Client.new(@app_id, @api_key)
+    client = Shenzhen::Plugins::baza_at_sibext::Client.new(@app_id, @api_key)
     response = client.upload_build(@file)
     if (200...300) === response.status and not response.body["error"]
       say_ok "Build successfully uploaded to Baza"

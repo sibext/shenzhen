@@ -1,12 +1,12 @@
 private
 
 def determine_file!
-  files = Dir['*.ipa']
+  files = Dir['*.ipa', '*.apk']
   @file ||= case files.length
             when 0 then nil
             when 1 then files.first
             else
-              @file = choose "Select an .ipa File:", *files
+              @file = choose "Select an .ipa or .apk File:", *files
             end
 end
 

@@ -49,7 +49,7 @@ command :'distribute:baza_for_stage' do |c|
 
   c.action do |args, options|
     determine_file! unless @file = options.file
-    say_error "Missing or unspecified .ipa file" and abort unless @file and File.exist?(@file)
+    say_error "Missing or unspecified .ipa or .apk file file" and abort unless @file and File.exist?(@file)
 
     determine_baza_app_id! unless @app_id = options.app_id || ENV['BAZA_APP_ID']
     say_error "Missing API Token" and abort unless @app_id

@@ -18,9 +18,11 @@ module Shenzhen::Plugins
         end
       end
 
-      def upload_build(ipa, options = {})
+      def upload_build(ipa, options)
         options.update({
-          :file => Faraday::UploadIO.new(ipa, 'application/octet-stream')
+          :file => Faraday::UploadIO.new(ipa, 'application/octet-stream'),
+          :version => options[:version] || '',
+          :identifier => options[:identifier] || ''
         })
 
         @connection.post("/api/upload", options).on_complete do |env|
@@ -41,11 +43,8 @@ command :'distribute:baza_for_stage' do |c|
   c.option '-f', '--file FILE', ".ipa file for the build"
   c.option '-a', '--app_id TOKEN', "API Token. Available at https://baza.sibext.ru/admin"
   c.option '-u', '--api_key API_KEY', "User Name. Available at https://baza.sibext.ru/admin"
-  c.option '-m', '--message MESSAGE', "Release message for the build"
-  c.option '-d', '--distribution_key DESTRIBUTION_KEY', "distribution key for distribution page"
-  c.option '-n', '--disable_notify', "disable notification"
-  c.option '-r', '--release_note RELEASE_NOTE', "release note for distribution page"
-  c.option '-v', '--visibility (private|public)', "privacy setting ( require public for personal free account)"
+  c.option '-b', '--version VERSION', "version .apk or .ipa"
+  c.option '-i', '--identifier IDENTIFIER', "identifier .apk or .ipa"
 
   c.action do |args, options|
     determine_file! unless @file = options.file
@@ -57,15 +56,15 @@ command :'distribute:baza_for_stage' do |c|
     determine_baza_api_key! unless @api_key = options.api_key || ENV['BAZA_API_KEY']
     say_error "Missing User Name" and abort unless @app_id
 
-    @message = options.message
-    @distribution_key = options.distribution_key || ENV['BAZA_DESTRIBUTION_KEY']
-    @release_note = options.release_note
-    @disable_notify = ! options.disable_notify.nil? ? "yes" : nil
-    @visibility = options.visibility
-    @message = options.message
+    @identifier = options.identifier
+    @version = options.version
+
+    parameters = {}
+    parameters[:version] = @version if @version
+    parameters[:identifier] = @identifier if @identifier
 
     client = Shenzhen::Plugins::Baza_for_stage::Client.new(@app_id, @api_key)
-    response = client.upload_build(@file)
+    response = client.upload_build(@file, parameters)
     if (200...300) === response.status and not response.body["error"]
       say_ok "Build successfully uploaded to Baza"
     else

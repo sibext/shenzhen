@@ -60,6 +60,7 @@ command :'distribute:baza_for_dev' do |c|
 
     @identifier = options.identifier
     @version = options.version
+    @feature = options.feature
 
     parameters = {}
     parameters[:version] = @version if @version

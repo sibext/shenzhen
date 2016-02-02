@@ -22,7 +22,8 @@ module Shenzhen::Plugins
         options.update({
           :file => Faraday::UploadIO.new(ipa, 'application/octet-stream'),
           :version => options[:version] || '',
-          :identifier => options[:identifier] || ''
+          :identifier => options[:identifier] || '',
+          :feature => options[:feature] || ''
         })
 
         @connection.post("/api/upload", options).on_complete do |env|
@@ -45,6 +46,7 @@ command :'distribute:baza_at_sibext' do |c|
   c.option '-u', '--api_key API_KEY', "User Name. Available at https://baza.sibext.ru/admin"
   c.option '-b', '--version VERSION', "version .apk or .ipa"
   c.option '-i', '--identifier IDENTIFIER', "identifier .apk or .ipa"
+  c.option '-z', '--feature FEATURE', "feature .apk or .ipa"
 
   c.action do |args, options|
     determine_file! unless @file = options.file
@@ -58,10 +60,12 @@ command :'distribute:baza_at_sibext' do |c|
 
     @identifier = options.identifier
     @version = options.version
+    @feature = options.feature
 
     parameters = {}
     parameters[:version] = @version if @version
     parameters[:identifier] = @identifier if @identifier
+    parameters[:feature] = @feature if @feature
 
     client = Shenzhen::Plugins::Baza_at_sibext::Client.new(@app_id, @api_key)
     response = client.upload_build(@file, parameters)
